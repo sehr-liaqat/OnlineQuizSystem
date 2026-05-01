@@ -224,3 +224,4 @@ C:\Users\Super\source\repos\OnlineQuizSystem\OnlineQuizSystem\bin\Debug\net10.0\
 C:\Users\Super\source\repos\OnlineQuizSystem\OnlineQuizSystem\bin\Debug\net10.0\tr\Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
 C:\Users\Super\source\repos\OnlineQuizSystem\OnlineQuizSystem\bin\Debug\net10.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
 C:\Users\Super\source\repos\OnlineQuizSystem\OnlineQuizSystem\bin\Debug\net10.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.MSBuild.resources.dll
+C:\Users\Super\source\repos\OnlineQuizSystem\OnlineQuizSystem\obj\Debug\net10.0\OnlineQuizSystem.sourcelink.json
