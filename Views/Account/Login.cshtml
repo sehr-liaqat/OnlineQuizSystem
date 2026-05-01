@@ -1,0 +1,209 @@
+﻿@model OnlineQuizSystem.Models.ViewModels.LoginViewModel
+@{
+    ViewData["Title"] = "Login";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login - QuizMaster</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <style>
+            body {
+                background: #0f0f23;
+                min-height: 100vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-family: 'Segoe UI', sans-serif;
+            }
+
+            .login-container {
+                width: 100%;
+                max-width: 450px;
+                padding: 20px;
+            }
+
+            .login-card {
+                background: #16213e;
+                border-radius: 20px;
+                padding: 40px;
+                border: 1px solid rgba(108,99,255,0.3);
+                box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            }
+
+            .brand-logo {
+                text-align: center;
+                margin-bottom: 30px;
+            }
+
+                .brand-logo .icon-box {
+                    width: 70px;
+                    height: 70px;
+                    background: linear-gradient(135deg, #6c63ff, #f50057);
+                    border-radius: 20px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin: 0 auto 15px;
+                    font-size: 1.8rem;
+                    color: white;
+                }
+
+                .brand-logo h3 {
+                    color: white;
+                    font-weight: 700;
+                    margin: 0;
+                }
+
+                .brand-logo p {
+                    color: #888;
+                    font-size: 0.9rem;
+                    margin: 5px 0 0;
+                }
+
+            .form-label {
+                color: #a0a0b0;
+                font-size: 0.85rem;
+                font-weight: 600;
+                margin-bottom: 6px;
+            }
+
+            .form-control {
+                background: #0f0f23;
+                border: 1px solid rgba(108,99,255,0.3);
+                border-radius: 10px;
+                color: white;
+                padding: 12px 15px;
+                font-size: 0.95rem;
+            }
+
+                .form-control:focus {
+                    background: #0f0f23;
+                    border-color: #6c63ff;
+                    color: white;
+                    box-shadow: 0 0 0 3px rgba(108,99,255,0.2);
+                }
+
+            .btn-login {
+                background: linear-gradient(135deg, #6c63ff, #f50057);
+                border: none;
+                border-radius: 10px;
+                color: white;
+                padding: 13px;
+                font-size: 1rem;
+                font-weight: 600;
+                width: 100%;
+                margin-top: 10px;
+                transition: all 0.3s;
+            }
+
+                .btn-login:hover {
+                    opacity: 0.9;
+                    transform: translateY(-2px);
+                    box-shadow: 0 10px 25px rgba(108,99,255,0.4);
+                }
+
+            .register-link {
+                text-align: center;
+                margin-top: 20px;
+                color: #888;
+                font-size: 0.9rem;
+            }
+
+                .register-link a {
+                    color: #6c63ff;
+                    text-decoration: none;
+                    font-weight: 600;
+                }
+
+            .alert-danger {
+                background: rgba(245,0,87,0.1);
+                border: 1px solid rgba(245,0,87,0.3);
+                color: #ff6b8a;
+                border-radius: 10px;
+            }
+
+            .alert-success {
+                background: rgba(0,200,150,0.1);
+                border: 1px solid rgba(0,200,150,0.3);
+                color: #00c896;
+                border-radius: 10px;
+            }
+
+            .demo-accounts {
+                background: rgba(108,99,255,0.1);
+                border: 1px solid rgba(108,99,255,0.2);
+                border-radius: 10px;
+                padding: 15px;
+                margin-top: 20px;
+            }
+
+                .demo-accounts p {
+                    color: #888;
+                    font-size: 0.8rem;
+                    margin: 3px 0;
+                }
+
+                .demo-accounts strong {
+                    color: #6c63ff;
+                }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="brand-logo">
+                <div class="icon-box">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h3>QuizMaster</h3>
+                <p>Online Quiz System</p>
+            </div>
+
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success">
+                    <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
+                </div>
+            }
+
+            <form asp-action="Login" method="post">
+                <div asp-validation-summary="All" class="alert alert-danger" style="display:@(ViewContext.ModelState.ErrorCount > 0 ? "block" : "none")"></div>
+
+                <div class="mb-3">
+                    <label class="form-label">
+                        <i class="fas fa-envelope me-1"></i> Email Address
+                    </label>
+                    <input asp-for="Email" class="form-control" placeholder="Enter your email" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">
+                        <i class="fas fa-lock me-1"></i> Password
+                    </label>
+                    <input asp-for="Password" class="form-control" placeholder="Enter your password" />
+                </div>
+
+                <button type="submit" class="btn-login">
+                    <i class="fas fa-sign-in-alt me-2"></i> Login
+                </button>
+            </form>
+
+            <div class="register-link">
+                New account? <a asp-action="Register">Register</a>
+            </div>
+
+            <div class="demo-accounts">
+                <p><i class="fas fa-info-circle me-1"></i> <strong>Demo Admin:</strong></p>
+                <p>Email: admin@quiz.com</p>
+                <p>Password: Admin@123</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

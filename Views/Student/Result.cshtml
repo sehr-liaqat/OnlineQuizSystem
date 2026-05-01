@@ -1,0 +1,89 @@
+﻿@model OnlineQuizSystem.Models.QuizAttempt
+@{
+    ViewData["Title"] = "Quiz Result";
+    var percentage = Model.Quiz!.TotalMarks > 0
+        ? (int)((Model.ObtainedMarks * 100.0) / Model.Quiz.TotalMarks)
+        : 0;
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="content-card text-center">
+
+            @if (Model.IsPassed)
+            {
+                <div style="font-size:3rem;margin-bottom:15px;">
+                    <i class="fas fa-award" style="color:#00c896;"></i>
+                </div>
+                <h3 style="color:#00c896;font-weight:700;">Congratulations!</h3>
+                <p style="color:#888;">You have passed the quiz!</p>
+            }
+            else
+            {
+                <div style="font-size:3rem;margin-bottom:15px;">
+                    <i class="fas fa-times-circle" style="color:#f50057;"></i>
+                </div>
+                <h3 style="color:#f50057;font-weight:700;">Better Luck Next Time!</h3>
+                <p style="color:#888;">You did not pass this time. Keep practicing!</p>
+            }
+
+            <!-- Score Circle -->
+            <div style="width:150px;height:150px;border-radius:50%;
+                background:conic-gradient(@(Model.IsPassed ? "#00c896" : "#f50057")
+                @(percentage * 3.6)deg, #1a1a2e 0deg);
+                display:flex;align-items:center;justify-content:center;
+                margin:25px auto;position:relative;">
+                <div style="width:120px;height:120px;border-radius:50%;
+                    background:#16213e;display:flex;align-items:center;
+                    justify-content:center;flex-direction:column;">
+                    <div style="font-size:1.8rem;font-weight:700;
+                        color:@(Model.IsPassed ? "#00c896" : "#f50057");">
+                        @percentage%
+                    </div>
+                    <div style="color:#888;font-size:0.75rem;">Score</div>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-4">
+                <div class="col-4">
+                    <div class="stat-card">
+                        <div style="color:#6c63ff;font-size:1.5rem;font-weight:700;">
+                            @Model.ObtainedMarks
+                        </div>
+                        <div style="color:#888;font-size:0.8rem;">Obtained</div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="stat-card">
+                        <div style="color:white;font-size:1.5rem;font-weight:700;">
+                            @Model.Quiz.TotalMarks
+                        </div>
+                        <div style="color:#888;font-size:0.8rem;">Total Marks</div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="stat-card">
+                        <div style="color:orange;font-size:1.5rem;font-weight:700;">
+                            @Model.Quiz.PassingMarks
+                        </div>
+                        <div style="color:#888;font-size:0.8rem;">Passing Marks</div>
+                    </div>
+                </div>
+            </div>
+
+            <p style="color:#888;font-size:0.9rem;">
+                <i class="fas fa-calendar me-2"></i>
+                Attempted: @Model.AttemptedAt.ToString("dd MMM yyyy, hh:mm tt")
+            </p>
+
+            <div class="d-flex gap-3 justify-content-center mt-3">
+                <a asp-action="AvailableQuizzes" class="btn btn-primary">
+                    <i class="fas fa-book-open me-2"></i>More Quizzes
+                </a>
+                <a asp-action="MyResults" class="btn btn-outline-secondary">
+                    <i class="fas fa-chart-bar me-2"></i>My Results
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

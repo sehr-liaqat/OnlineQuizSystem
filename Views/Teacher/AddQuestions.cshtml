@@ -1,0 +1,157 @@
+﻿@using OnlineQuizSystem.Models
+@{
+    ViewData["Title"] = "Add Questions";
+    var quiz = ViewBag.Quiz as Quiz;
+    var questions = ViewBag.Questions as List<Question> ?? new List<Question>();
+}
+
+<div class="row g-4">
+    <!-- Left: Add Question Form -->
+    <div class="col-lg-7">
+        <div class="content-card">
+            <h5 class="mb-1">
+                <i class="fas fa-question-circle me-2" style="color:#6c63ff;"></i>
+                Add Question
+            </h5>
+            <p style="color:#888;font-size:0.85rem;">Quiz: @quiz?.Title</p>
+
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert" style="background:rgba(0,200,150,0.1);
+                    border:1px solid rgba(0,200,150,0.3);color:#00c896;border-radius:10px;">
+                    <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
+                </div>
+            }
+
+            <form asp-action="AddQuestions" method="post">
+                <input type="hidden" name="quizId" value="@quiz?.Id" />
+
+                <div class="mb-3">
+                    <label class="form-label" style="color:#a0a0b0;">Question Text</label>
+                    <textarea name="questionText" class="form-control" rows="3"
+                              style="background:#0f0f23;border:1px solid rgba(108,99,255,0.3);
+                    color:white;border-radius:10px;padding:12px;"
+                              placeholder="Enter your question here..." required></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" style="color:#a0a0b0;">Marks</label>
+                    <input name="marks" type="number" class="form-control" value="1" min="1"
+                           style="background:#0f0f23;border:1px solid rgba(108,99,255,0.3);
+                    color:white;border-radius:10px;padding:12px;width:150px;" />
+                </div>
+
+                <label class="form-label" style="color:#a0a0b0;">Answer Options</label>
+                <p style="color:#888;font-size:0.8rem;">
+                    Select the radio button next to the correct answer
+                </p>
+
+                @for (int i = 0; i < 4; i++)
+                {
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <input type="radio" name="correctOption" value="@i"
+                        @(i == 0 ? "checked" : "")
+                               style="accent-color:#6c63ff;width:18px;height:18px;" />
+                        <input name="optionTexts" class="form-control"
+                               style="background:#0f0f23;border:1px solid rgba(108,99,255,0.3);
+                        color:white;border-radius:10px;padding:10px;"
+                               placeholder="Option @(i + 1)" required />
+                    </div>
+                }
+
+                <div class="mt-4 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>Add Question
+                    </button>
+                    <a asp-action="MyQuizzes" class="btn btn-success">
+                        <i class="fas fa-check me-2"></i>Finish Quiz
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Right: Quiz Info + Questions List -->
+    <div class="col-lg-5">
+        <!-- Quiz Info -->
+        <div class="content-card mb-4">
+            <h5><i class="fas fa-info-circle me-2" style="color:#6c63ff;"></i>Quiz Info</h5>
+            <div style="color:#888;font-size:0.9rem;">
+                <p><strong style="color:white;">Title:</strong> @quiz?.Title</p>
+                <p><strong style="color:white;">Subject:</strong> @quiz?.Subject</p>
+                <p><strong style="color:white;">Total Marks:</strong> @quiz?.TotalMarks</p>
+                <p><strong style="color:white;">Passing Marks:</strong> @quiz?.PassingMarks</p>
+                <p><strong style="color:white;">Time Limit:</strong> @quiz?.TimeLimitMinutes mins</p>
+                <p>
+                    <strong style="color:white;">Total Questions:</strong>
+                    <span style="color:#6c63ff;font-weight:700;font-size:1.1rem;">
+                        @questions.Count
+                    </span>
+                </p>
+            </div>
+        </div>
+
+        <!-- Questions List -->
+        <div class="content-card">
+            <h5 class="mb-3">
+                <i class="fas fa-list me-2" style="color:#6c63ff;"></i>
+                Added Questions (@questions.Count)
+            </h5>
+
+            @if (!questions.Any())
+            {
+                <div class="text-center py-3">
+                    <i class="fas fa-inbox fa-2x mb-2" style="color:#888;"></i>
+                    <p style="color:#888;font-size:0.85rem;">No questions added yet.</p>
+                </div>
+            }
+            else
+            {
+                @for (int i = 0; i < questions.Count; i++)
+                {
+                    var q = questions[i];
+                    <div style="background:#0f0f23;border-radius:10px;padding:15px;
+                        margin-bottom:12px;border:1px solid rgba(108,99,255,0.15);">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div style="display:flex;align-items:center;gap:8px;">
+                                <span style="background:linear-gradient(135deg,#6c63ff,#f50057);
+                                    width:24px;height:24px;border-radius:50%;
+                                    display:flex;align-items:center;justify-content:center;
+                                    color:white;font-size:0.75rem;font-weight:700;
+                                    flex-shrink:0;">
+                                    @(i + 1)
+                                </span>
+                                <span style="color:white;font-size:0.85rem;font-weight:600;">
+                                    @(q.QuestionText.Length > 50
+                                        ? q.QuestionText.Substring(0, 50) + "..."
+                                        : q.QuestionText)
+                                </span>
+                            </div>
+                            <a asp-action="DeleteQuestion"
+                                   asp-route-id="@q.Id"
+                                   asp-route-quizId="@quiz!.Id"
+                                   class="btn btn-sm btn-danger"
+                                   onclick="return confirm('Delete this question?')"
+                                   style="padding:3px 8px;font-size:0.75rem;">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
+                        <div style="color:#888;font-size:0.75rem;margin-left:32px;">
+                            Marks: <span style="color:#6c63ff;">@q.Marks</span>
+                            &nbsp;|&nbsp;
+                            @foreach (var opt in q.Options)
+                            {
+                                if (opt.IsCorrect)
+                                {
+                                    <span style="color:#00c896;">
+                                        ✓ @opt.OptionText
+                                    </span>
+                                }
+                            }
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>

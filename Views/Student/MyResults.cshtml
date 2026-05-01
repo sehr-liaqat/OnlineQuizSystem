@@ -1,0 +1,83 @@
+﻿@model IEnumerable<OnlineQuizSystem.Models.QuizAttempt>
+@{
+    ViewData["Title"] = "My Results";
+}
+
+<div class="content-card">
+    <h5 class="mb-4">
+        <i class="fas fa-chart-bar me-2" style="color:#6c63ff;"></i>My Quiz Results
+    </h5>
+
+    @if (!Model.Any())
+    {
+        <div class="text-center py-5">
+            <i class="fas fa-inbox fa-3x mb-3" style="color:#888;"></i>
+            <p style="color:#888;">No quiz attempts yet.</p>
+            <a asp-action="AvailableQuizzes" class="btn btn-primary">
+                <i class="fas fa-book-open me-2"></i>Start a Quiz
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-dark table-hover">
+                <thead>
+                    <tr>
+                        <th>Quiz Title</th>
+                        <th>Subject</th>
+                        <th>Score</th>
+                        <th>Percentage</th>
+                        <th>Result</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var attempt in Model)
+                    {
+                        var pct = attempt.Quiz!.TotalMarks > 0
+                            ? (int)((attempt.ObtainedMarks * 100.0) / attempt.Quiz.TotalMarks)
+                            : 0;
+                        <tr>
+                            <td style="color:white;font-weight:600;">
+                                @attempt.Quiz?.Title
+                            </td>
+                            <td style="color:#888;">@attempt.Quiz?.Subject</td>
+                            <td>
+                                <span style="color:#6c63ff;font-weight:700;">
+                                    @attempt.ObtainedMarks / @attempt.Quiz?.TotalMarks
+                                </span>
+                            </td>
+                            <td>
+                                <div style="background:#0f0f23;border-radius:20px;
+                                    height:8px;width:100px;overflow:hidden;">
+                                    <div style="background:@(attempt.IsPassed ? "#00c896" : "#f50057");
+                                        height:100%;width:@pct%;border-radius:20px;">
+                                    </div>
+                                </div>
+                                <small style="color:#888;">@pct%</small>
+                            </td>
+                            <td>
+                                @if (attempt.IsPassed)
+                                {
+                                    <span class="badge bg-success">
+                                        <i class="fas fa-check me-1"></i>Passed
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">
+                                        <i class="fas fa-times me-1"></i>Failed
+                                    </span>
+                                }
+                            </td>
+                            <td style="color:#888;">
+                                @attempt.AttemptedAt.ToString("dd MMM yyyy")
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

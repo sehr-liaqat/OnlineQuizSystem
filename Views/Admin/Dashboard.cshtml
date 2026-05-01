@@ -1,0 +1,105 @@
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="row g-4 mb-4">
+    <!-- Stat Cards -->
+    <div class="col-xl-3 col-md-6">
+        <div class="stat-card">
+            <div class="icon" style="background: rgba(108,99,255,0.2);">
+                <i class="fas fa-users" style="color: #6c63ff;"></i>
+            </div>
+            <h3>@ViewBag.TotalUsers</h3>
+            <p>Total Users</p>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="stat-card">
+            <div class="icon" style="background: rgba(245,0,87,0.2);">
+                <i class="fas fa-chalkboard-teacher" style="color: #f50057;"></i>
+            </div>
+            <h3>@ViewBag.TotalTeachers</h3>
+            <p>Total Teachers</p>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="stat-card">
+            <div class="icon" style="background: rgba(0,200,150,0.2);">
+                <i class="fas fa-user-graduate" style="color: #00c896;"></i>
+            </div>
+            <h3>@ViewBag.TotalStudents</h3>
+            <p>Total Students</p>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6">
+        <div class="stat-card">
+            <div class="icon" style="background: rgba(255,165,0,0.2);">
+                <i class="fas fa-clipboard-list" style="color: orange;"></i>
+            </div>
+            <h3>@ViewBag.TotalQuizzes</h3>
+            <p>Total Quizzes</p>
+        </div>
+    </div>
+</div>
+
+<!-- Chart + Recent Users -->
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="content-card">
+            <h5><i class="fas fa-chart-line me-2" style="color:#6c63ff;"></i>Quiz Attempts Overview</h5>
+            <canvas id="attemptsChart" height="100"></canvas>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="content-card">
+            <h5><i class="fas fa-users me-2" style="color:#6c63ff;"></i>Recent Users</h5>
+            @foreach (var user in ViewBag.Users)
+            {
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div style="width:38px;height:38px;border-radius:50%;
+                        background:linear-gradient(135deg,#6c63ff,#f50057);
+                        display:flex;align-items:center;justify-content:center;
+                        color:white;font-weight:700;font-size:0.9rem;flex-shrink:0;">
+                        @user.FullName.Substring(0, 1).ToUpper()
+                    </div>
+                    <div style="flex:1;min-width:0;">
+                        <div style="color:white;font-size:0.9rem;font-weight:600;">
+                            @user.FullName
+                        </div>
+                        <div style="color:#888;font-size:0.75rem;">@user.Email</div>
+                    </div>
+                    <span class="badge-role badge-@user.Role.ToLower()">@user.Role</span>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const ctx = document.getElementById('attemptsChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+                datasets: [{
+                    label: 'Quiz Attempts',
+                    data: [12,19,8,25,32,18,28,35,22,40,38,45],
+                    borderColor: '#6c63ff',
+                    backgroundColor: 'rgba(108,99,255,0.1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { labels: { color: '#a0a0b0' } } },
+                scales: {
+                    x: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                    y: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+                }
+            }
+        });
+    </script>
+}

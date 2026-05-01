@@ -1,0 +1,124 @@
+﻿@model OnlineQuizSystem.Models.ViewModels.QuizViewModel
+@{
+    ViewData["Title"] = "Quiz: " + Model.Title;
+}
+
+<div class="row justify-content-center">
+    <div class="col-lg-9">
+
+        <!-- Timer Bar -->
+        <div class="content-card mb-3 d-flex justify-content-between align-items-center">
+            <div>
+                <h6 style="color:white;margin:0;">@Model.Title</h6>
+                <small style="color:#888;">@Model.Subject</small>
+            </div>
+            <div style="text-align:center;">
+                <div id="timer" style="font-size:1.8rem;font-weight:700;color:#6c63ff;">
+                    @Model.TimeLimitMinutes:00
+                </div>
+                <small style="color:#888;">Time Remaining</small>
+            </div>
+            <div style="text-align:right;">
+                <div style="color:white;font-weight:700;">@Model.TotalMarks</div>
+                <small style="color:#888;">Total Marks</small>
+            </div>
+        </div>
+
+        <form asp-action="SubmitQuiz" method="post" id="quizForm">
+            <input type="hidden" name="QuizId" value="@Model.QuizId" />
+            <input type="hidden" name="Title" value="@Model.Title" />
+            <input type="hidden" name="TotalMarks" value="@Model.TotalMarks" />
+            <input type="hidden" name="PassingMarks" value="@Model.PassingMarks" />
+            <input type="hidden" name="TimeLimitMinutes" value="@Model.TimeLimitMinutes" />
+            <input type="hidden" name="Subject" value="@Model.Subject" />
+
+            @for (int i = 0; i < Model.Questions.Count; i++)
+            {
+                var q = Model.Questions[i];
+                <div class="content-card mb-3">
+                    <div class="d-flex align-items-start gap-3 mb-3">
+                        <div style="background:linear-gradient(135deg,#6c63ff,#f50057);
+                            width:32px;height:32px;border-radius:50%;
+                            display:flex;align-items:center;justify-content:center;
+                            color:white;font-weight:700;font-size:0.85rem;flex-shrink:0;">
+                            @(i + 1)
+                        </div>
+                        <div>
+                            <p style="color:white;font-weight:600;margin:0;">
+                                @q.QuestionText
+                            </p>
+                            <small style="color:#888;">Marks: @q.Marks</small>
+                        </div>
+                    </div>
+
+                    <input type="hidden" name="Questions[@i].QuestionId" value="@q.QuestionId" />
+                    <input type="hidden" name="Questions[@i].QuestionText" value="@q.QuestionText" />
+                    <input type="hidden" name="Questions[@i].Marks" value="@q.Marks" />
+
+                    <div class="ps-5">
+                        @for (int j = 0; j < q.Options.Count; j++)
+                        {
+                            var opt = q.Options[j];
+                            <div class="option-item mb-2" onclick="selectOption(this)"
+                                 style="background:#0f0f23;border:1px solid rgba(108,99,255,0.2);
+                                border-radius:10px;padding:12px 15px;cursor:pointer;
+                                transition:all 0.2s;display:flex;align-items:center;gap:12px;">
+                                <input type="radio" name="Questions[@i].SelectedOptionId"
+                                       value="@opt.OptionId"
+                                       style="accent-color:#6c63ff;width:16px;height:16px;" />
+                                <input type="hidden"
+                                       name="Questions[@i].Options[@j].OptionId"
+                                       value="@opt.OptionId" />
+                                <input type="hidden"
+                                       name="Questions[@i].Options[@j].OptionText"
+                                       value="@opt.OptionText" />
+                                <span style="color:#e0e0e0;">@opt.OptionText</span>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+
+            <div class="text-center mt-4 mb-5">
+                <button type="submit" class="btn btn-primary px-5 py-3"
+                        style="font-size:1.1rem;"
+                        onclick="return confirm('Submit quiz? You cannot change answers after submitting.')">
+                    <i class="fas fa-paper-plane me-2"></i>Submit Quiz
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Timer
+        let timeLeft = @Model.TimeLimitMinutes * 60;
+        const timerEl = document.getElementById('timer');
+
+        const countdown = setInterval(() => {
+            timeLeft--;
+            const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+            const s = (timeLeft % 60).toString().padStart(2, '0');
+            timerEl.textContent = `${m}:${s}`;
+
+            if (timeLeft <= 60) timerEl.style.color = '#f50057';
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                document.getElementById('quizForm').submit();
+            }
+        }, 1000);
+
+        // Option select highlight
+        function selectOption(el) {
+            const parent = el.closest('.ps-5');
+            parent.querySelectorAll('.option-item').forEach(o => {
+                o.style.border = '1px solid rgba(108,99,255,0.2)';
+                o.style.background = '#0f0f23';
+            });
+            el.style.border = '1px solid #6c63ff';
+            el.style.background = 'rgba(108,99,255,0.15)';
+            el.querySelector('input[type=radio]').checked = true;
+        }
+    </script>
+}

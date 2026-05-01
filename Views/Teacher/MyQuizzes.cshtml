@@ -1,0 +1,74 @@
+﻿@model IEnumerable<OnlineQuizSystem.Models.Quiz>
+@{
+    ViewData["Title"] = "My Quizzes";
+}
+
+<div class="content-card">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h5><i class="fas fa-list me-2" style="color:#6c63ff;"></i>My Quizzes</h5>
+        <a asp-action="CreateQuiz" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Create New Quiz
+        </a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="text-center py-5">
+            <i class="fas fa-inbox fa-3x mb-3" style="color:#888;"></i>
+            <p style="color:#888;">No quizzes created yet.</p>
+            <a asp-action="CreateQuiz" class="btn btn-primary">
+                <i class="fas fa-plus me-2"></i>Create Your First Quiz
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var quiz in Model)
+            {
+                <div class="col-md-6 col-xl-4">
+                    <div class="stat-card h-100">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <span class="badge @(quiz.IsActive ? "bg-success" : "bg-secondary")">
+                                @(quiz.IsActive ? "Active" : "Inactive")
+                            </span>
+                            <small style="color:#888;">@quiz.CreatedAt.ToString("dd MMM yyyy")</small>
+                        </div>
+                        <h6 style="color:white;font-weight:700;">@quiz.Title</h6>
+                        <p style="color:#888;font-size:0.85rem;">@quiz.Subject</p>
+                        <hr style="border-color:rgba(108,99,255,0.2);" />
+                        <div class="row text-center mb-3">
+                            <div class="col-4">
+                                <div style="color:#6c63ff;font-weight:700;">@quiz.TotalMarks</div>
+                                <div style="color:#888;font-size:0.75rem;">Marks</div>
+                            </div>
+                            <div class="col-4">
+                                <div style="color:#00c896;font-weight:700;">@quiz.PassingMarks</div>
+                                <div style="color:#888;font-size:0.75rem;">Passing</div>
+                            </div>
+                            <div class="col-4">
+                                <div style="color:orange;font-weight:700;">@quiz.TimeLimitMinutes</div>
+                                <div style="color:#888;font-size:0.75rem;">Minutes</div>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-2 flex-wrap">
+                            <a asp-action="AddQuestions" asp-route-quizId="@quiz.Id"
+                                   class="btn btn-primary btn-sm flex-fill">
+                                <i class="fas fa-plus"></i> Questions
+                            </a>
+                            <a asp-action="QuizResults" asp-route-quizId="@quiz.Id"
+                                   class="btn btn-outline-info btn-sm flex-fill">
+                                <i class="fas fa-chart-bar"></i> Results
+                            </a>
+                            <a asp-action="DeleteQuiz" asp-route-id="@quiz.Id"
+                                   class="btn btn-danger btn-sm flex-fill"
+                                   onclick="return confirm('Delete this quiz and all its questions?')">
+                                <i class="fas fa-trash"></i> Delete
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

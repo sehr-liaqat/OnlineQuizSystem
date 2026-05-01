@@ -1,0 +1,22 @@
+[
+  {
+    "ContainingType": "OnlineQuizSystem.Controllers.API.QuizApiController",
+    "Method": "GetQuizzes",
+    "RelativePath": "api/QuizApi/quizzes",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "OnlineQuizSystem.Controllers.API.QuizApiController",
+    "Method": "GetStats",
+    "RelativePath": "api/QuizApi/stats",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  }
+]

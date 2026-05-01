@@ -1,0 +1,79 @@
+﻿@model IEnumerable<OnlineQuizSystem.Models.Quiz>
+@{
+    ViewData["Title"] = "Available Quizzes";
+}
+
+<div class="content-card mb-4">
+    <div class="d-flex justify-content-between align-items-center">
+        <h5><i class="fas fa-book-open me-2" style="color:#6c63ff;"></i>Available Quizzes</h5>
+        <input type="text" id="searchInput" class="form-control w-25"
+               placeholder="Search quizzes..."
+               style="background:#0f0f23;border:1px solid rgba(108,99,255,0.3);
+        color:white;border-radius:8px;" />
+    </div>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="content-card text-center py-5">
+        <i class="fas fa-inbox fa-3x mb-3" style="color:#888;"></i>
+        <p style="color:#888;">No quizzes available at the moment.</p>
+    </div>
+}
+else
+{
+    <div class="row g-4" id="quizGrid">
+        @foreach (var quiz in Model)
+        {
+            <div class="col-md-6 col-xl-4 quiz-card-wrapper">
+                <div class="stat-card h-100">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <span style="background:rgba(108,99,255,0.2);color:#6c63ff;
+                            padding:4px 12px;border-radius:20px;font-size:0.8rem;">
+                            @quiz.Subject
+                        </span>
+                        <small style="color:#888;">@quiz.TimeLimitMinutes mins</small>
+                    </div>
+
+                    <h6 style="color:white;font-weight:700;font-size:1rem;">@quiz.Title</h6>
+                    <p style="color:#888;font-size:0.85rem;min-height:40px;">
+                        @(string.IsNullOrEmpty(quiz.Description) ? "No description." : quiz.Description)
+                    </p>
+
+                    <hr style="border-color:rgba(108,99,255,0.2);" />
+
+                    <div class="row text-center mb-3">
+                        <div class="col-6">
+                            <div style="color:#6c63ff;font-weight:700;font-size:1.1rem;">
+                                @quiz.TotalMarks
+                            </div>
+                            <div style="color:#888;font-size:0.75rem;">Total Marks</div>
+                        </div>
+                        <div class="col-6">
+                            <div style="color:#00c896;font-weight:700;font-size:1.1rem;">
+                                @quiz.PassingMarks
+                            </div>
+                            <div style="color:#888;font-size:0.75rem;">Passing Marks</div>
+                        </div>
+                    </div>
+
+                    <a asp-action="StartQuiz" asp-route-quizId="@quiz.Id"
+                           class="btn btn-primary w-100">
+                        <i class="fas fa-play me-2"></i>Start Quiz
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@section Scripts {
+    <script>
+        document.getElementById('searchInput').addEventListener('keyup', function () {
+            const val = this.value.toLowerCase();
+            document.querySelectorAll('.quiz-card-wrapper').forEach(card => {
+                card.style.display = card.textContent.toLowerCase().includes(val) ? '' : 'none';
+            });
+        });
+    </script>
+}

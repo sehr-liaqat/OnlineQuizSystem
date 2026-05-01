@@ -1,0 +1,95 @@
+﻿@{
+    ViewData["Title"] = "Teacher Dashboard";
+}
+
+<div class="row g-4 mb-4">
+    <div class="col-xl-4 col-md-6">
+        <div class="stat-card">
+            <div class="icon" style="background:rgba(108,99,255,0.2);">
+                <i class="fas fa-clipboard-list" style="color:#6c63ff;"></i>
+            </div>
+            <h3>@ViewBag.MyQuizzes</h3>
+            <p>My Quizzes</p>
+        </div>
+    </div>
+    <div class="col-xl-4 col-md-6">
+        <div class="stat-card">
+            <div class="icon" style="background:rgba(0,200,150,0.2);">
+                <i class="fas fa-users" style="color:#00c896;"></i>
+            </div>
+            <h3>@ViewBag.TotalAttempts</h3>
+            <p>Total Attempts</p>
+        </div>
+    </div>
+    <div class="col-xl-4 col-md-6">
+        <div class="stat-card">
+            <div class="icon" style="background:rgba(255,165,0,0.2);">
+                <i class="fas fa-plus-circle" style="color:orange;"></i>
+            </div>
+            <h3>
+                <a asp-controller="Teacher" asp-action="CreateQuiz"
+                       style="color:white;text-decoration:none;font-size:1rem;">
+                    Create New Quiz
+                </a>
+            </h3>
+            <p>Add New Quiz</p>
+        </div>
+    </div>
+</div>
+
+<div class="content-card">
+    <h5><i class="fas fa-list me-2" style="color:#6c63ff;"></i>Recent Quizzes</h5>
+    @if (ViewBag.RecentQuizzes != null && ((List<OnlineQuizSystem.Models.Quiz>)ViewBag.RecentQuizzes).Count > 0)
+    {
+        <div class="table-responsive">
+            <table class="table table-dark table-hover">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Subject</th>
+                        <th>Total Marks</th>
+                        <th>Time Limit</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var quiz in (List<OnlineQuizSystem.Models.Quiz>)ViewBag.RecentQuizzes)
+                    {
+                        <tr>
+                            <td style="color:white;font-weight:600;">@quiz.Title</td>
+                            <td style="color:#888;">@quiz.Subject</td>
+                            <td style="color:#6c63ff;font-weight:600;">@quiz.TotalMarks</td>
+                            <td style="color:#888;">@quiz.TimeLimitMinutes mins</td>
+                            <td>
+                                <span class="badge @(quiz.IsActive ? "bg-success" : "bg-secondary")">
+                                    @(quiz.IsActive ? "Active" : "Inactive")
+                                </span>
+                            </td>
+                            <td>
+                                <a asp-action="AddQuestions" asp-route-quizId="@quiz.Id"
+                                       class="btn btn-sm btn-primary">
+                                    <i class="fas fa-plus"></i> Add Questions
+                                </a>
+                                <a asp-action="QuizResults" asp-route-quizId="@quiz.Id"
+                                       class="btn btn-sm btn-outline-info ms-1">
+                                    <i class="fas fa-chart-bar"></i> Results
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="text-center py-4">
+            <i class="fas fa-inbox fa-3x mb-3" style="color:#888;"></i>
+            <p style="color:#888;">No quizzes created yet.</p>
+            <a asp-action="CreateQuiz" class="btn btn-primary">
+                <i class="fas fa-plus me-2"></i>Create Your First Quiz
+            </a>
+        </div>
+    }
+</div>

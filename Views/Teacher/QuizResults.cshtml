@@ -1,0 +1,67 @@
+﻿@{
+    ViewData["Title"] = "Quiz Results";
+    var quiz = ViewBag.Quiz as OnlineQuizSystem.Models.Quiz;
+}
+
+<div class="content-card">
+    <h5 class="mb-1">
+        <i class="fas fa-chart-bar me-2" style="color:#6c63ff;"></i>
+        Quiz Results
+    </h5>
+    <p style="color:#888;font-size:0.85rem;">@quiz?.Title</p>
+
+    @if (ViewBag.Results == null || ((dynamic)ViewBag.Results).Count == 0)
+    {
+        <div class="text-center py-5">
+            <i class="fas fa-inbox fa-3x mb-3" style="color:#888;"></i>
+            <p style="color:#888;">No attempts yet for this quiz.</p>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive mt-3">
+            <table class="table table-dark table-hover">
+                <thead>
+                    <tr>
+                        <th>Student Name</th>
+                        <th>Email</th>
+                        <th>Marks Obtained</th>
+                        <th>Result</th>
+                        <th>Attempted At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var result in ViewBag.Results)
+                    {
+                        <tr>
+                            <td style="color:white;font-weight:600;">@result.FullName</td>
+                            <td style="color:#888;">@result.Email</td>
+                            <td>
+                                <span style="color:#6c63ff;font-weight:700;">
+                                    @result.ObtainedMarks / @quiz?.TotalMarks
+                                </span>
+                            </td>
+                            <td>
+                                @if (result.IsPassed)
+                                {
+                                    <span class="badge bg-success">
+                                        <i class="fas fa-check me-1"></i>Passed
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">
+                                        <i class="fas fa-times me-1"></i>Failed
+                                    </span>
+                                }
+                            </td>
+                            <td style="color:#888;">
+                                @result.AttemptedAt.ToString("dd MMM yyyy, hh:mm tt")
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

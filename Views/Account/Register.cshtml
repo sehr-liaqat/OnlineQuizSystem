@@ -1,0 +1,167 @@
+﻿@model OnlineQuizSystem.Models.ViewModels.RegisterViewModel
+@{
+    ViewData["Title"] = "Register";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register - QuizMaster</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <style>
+        body {
+            background: #0f0f23;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .register-card {
+            background: #16213e;
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid rgba(108,99,255,0.3);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            width: 100%;
+            max-width: 480px;
+        }
+        .brand-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .icon-box {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #6c63ff, #f50057);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 1.8rem;
+            color: white;
+        }
+        .brand-logo h3 { color: white; font-weight: 700; margin: 0; }
+        .brand-logo p { color: #888; font-size: 0.9rem; }
+        .form-label { color: #a0a0b0; font-size: 0.85rem; font-weight: 600; }
+        .form-control {
+            background: #0f0f23;
+            border: 1px solid rgba(108,99,255,0.3);
+            border-radius: 10px;
+            color: white;
+            padding: 12px 15px;
+        }
+        .form-control:focus {
+            background: #0f0f23;
+            border-color: #6c63ff;
+            color: white;
+            box-shadow: 0 0 0 3px rgba(108,99,255,0.2);
+        }
+        .form-select {
+            background: #0f0f23;
+            border: 1px solid rgba(108,99,255,0.3);
+            border-radius: 10px;
+            color: white;
+            padding: 12px 15px;
+        }
+        .form-select:focus {
+            background: #0f0f23;
+            border-color: #6c63ff;
+            color: white;
+            box-shadow: 0 0 0 3px rgba(108,99,255,0.2);
+        }
+        .form-select option { background: #16213e; }
+        .btn-register {
+            background: linear-gradient(135deg, #6c63ff, #f50057);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            padding: 13px;
+            font-size: 1rem;
+            font-weight: 600;
+            width: 100%;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+        .btn-register:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+        .login-link a { color: #6c63ff; text-decoration: none; font-weight: 600; }
+        .alert-danger {
+            background: rgba(245,0,87,0.1);
+            border: 1px solid rgba(245,0,87,0.3);
+            color: #ff6b8a;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div style="padding: 20px; width: 100%; max-width: 480px; margin: auto;">
+        <div class="register-card">
+            <div class="brand-logo">
+                <div class="icon-box">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+                <h3>Register</h3>
+                <p>Create New account</p>
+            </div>
+
+            <form asp-action="Register" method="post">
+                <div asp-validation-summary="All" class="alert alert-danger"
+                     style="display:@(ViewContext.ModelState.ErrorCount > 0 ? "block" : "none")"></div>
+
+                <div class="mb-3">
+                    <label class="form-label">
+                        <i class="fas fa-user me-1"></i> Full Name
+                    </label>
+                    <input asp-for="FullName" class="form-control" placeholder="Enter your full name" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">
+                        <i class="fas fa-envelope me-1"></i> Email
+                    </label>
+                    <input asp-for="Email" class="form-control" placeholder="Enter your email" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">
+                        <i class="fas fa-lock me-1"></i> Password
+                    </label>
+                    <input asp-for="Password" class="form-control" placeholder="Password must be at least 6 characters long." />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">
+                        <i class="fas fa-user-tag me-1"></i> Select Role
+                    </label>
+                    <select asp-for="Role" class="form-select">
+                        <option value="Student">Student</option>
+                        <option value="Teacher">Teacher</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-register">
+                    <i class="fas fa-user-plus me-2"></i> Create Account
+                </button>
+            </form>
+
+            <div class="login-link">
+                Already Register? <a asp-action="Login">Login</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
