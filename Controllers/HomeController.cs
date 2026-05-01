@@ -16,7 +16,5 @@ namespace OnlineQuizSystem.Controllers
         {
             return RedirectToAction("Login", "Account");
         }
-
-        
     }
 }

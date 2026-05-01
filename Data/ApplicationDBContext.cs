@@ -28,7 +28,7 @@ namespace OnlineQuizSystem.Data
                     Id = 1,
                     FullName = "Super Admin",
                     Email = "admin@quiz.com",
-                    PasswordHash = "$2a$11$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2uheWG/igi.",
+                    PasswordHash = "$2a$11$Tg5DkFRpzxKKlGEMJPzONOSSGQCUrQuFEx0WGVw3ynlEe3U6y3TDy",
                     Role = "Admin",
                     CreatedAt = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                     IsActive = true
